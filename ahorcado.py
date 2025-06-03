@@ -9,9 +9,9 @@ class Ahorcado:
 
   def arriesgar_letra(self, letra):
     letra = letra.lower()
-
     self.letras_adivinadas.add(letra)
-
+    if self.juego_terminado:
+      return False
     if letra in self.palabra_secreta:
       self._verificar_victoria()
       return True

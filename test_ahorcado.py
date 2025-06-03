@@ -100,5 +100,17 @@ class TestAhorcado(unittest.TestCase):
     #Verifica que la palabra secreta no siga en mayúscula
     self.assertNotEqual(juego.palabra_secreta, "PYTHON")
 
+  def test_no_se_puede_continuar_despues_de_ganar(self):
+    juego = Ahorcado("python")
+    juego.arriesgar_palabra("python")
+    self.assertTrue(juego.juego_terminado)
+    self.assertTrue(juego.victoria)
+    
+    # El estado debe mantenerse aunque se hagan más intentos
+    intentos_antes = juego.intentos_restantes
+    
+    #No se puede jugar luego de ganar 
+    self.assertFalse(juego.arriesgar_letra("p"))  
+
 if __name__ == "__main__":
   unittest.main()
