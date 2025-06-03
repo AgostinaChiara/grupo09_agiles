@@ -18,19 +18,20 @@ class TestAhorcado(unittest.TestCase):
     resultado = juego.arriesgar_palabra("pasapalabra")
     self.assertFalse(resultado)
 
-  # def test_adivinar_letra_correcta(self):
-  #   juego = Ahorcado("python")
-  #   resultado = juego.adivinar_letra("p")
-  #   self.assertTrue(resultado)
-  #   self.assertEqual(juego.intentos_restantes, 6) 
-  #   self.assertIn("p", juego.letras_adivinadas)
+  def test_adivinar_letra_correcta(self):
+    juego = Ahorcado("python")
+    resultado = juego.arriesgar_letra("p")
     
-  # def test_adivinar_letra_incorrecta(self):
-  #   juego = Ahorcado("python")
-  #   resultado = juego.adivinar_letra("a")
-  #   self.assertFalse(resultado)
-  #   self.assertEqual(juego.intentos_restantes, 5)
-  #   self.assertIn("a", juego.letras_adivinadas)
+    #Verifica que la letra este en la palabra.
+    self.assertTrue(resultado)
+    
+    #Verificar que no bajo la cantidad de intentos.
+    self.assertEqual(juego.intentos_restantes, 6) 
+    self.assertNotEqual(juego.intentos_restantes, 5)
+    
+    #Verifica que la letra este dentro de las letras adivinadas.
+    self.assertIn("p", juego.letras_adivinadas)
+
 
 if __name__ == "__main__":
   unittest.main()
