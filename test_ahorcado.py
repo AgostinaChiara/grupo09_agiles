@@ -92,5 +92,13 @@ class TestAhorcado(unittest.TestCase):
     self.assertNotEqual(juego.palabra_actual(), "_ _ _ a")
     self.assertNotEqual(juego.palabra_actual(), "h _ _ _")
 
+  def test_palabra_en_mayusculas_se_convierte_a_minusculas(self):
+    """Test que la palabra se convierte a minúsculas"""
+    juego = Ahorcado("PYTHON")
+    #Verifica que la palabra secreta se convierta a minúscula
+    self.assertEqual(juego.palabra_secreta, "python")
+    #Verifica que la palabra secreta no siga en mayúscula
+    self.assertNotEqual(juego.palabra_secreta, "PYTHON")
+
 if __name__ == "__main__":
   unittest.main()
