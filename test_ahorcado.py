@@ -70,9 +70,9 @@ class TestAhorcado(unittest.TestCase):
     #Verificar que el juego termino
     self.assertTrue(juego.juego_terminado)
 
-  # def test_palabra_actual_inicio(self):
-  #   juego = Ahorcado("hola")
-  #   self.assertEqual(juego.palabra_actual(), "____")
+  def test_palabra_actual_inicio(self):
+    juego = Ahorcado("hola")
+    self.assertEqual(juego.palabra_actual(), "_ _ _ _")
 
 
 

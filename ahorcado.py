@@ -50,9 +50,10 @@ class Ahorcado:
     resultado = ""
     for letra in self.palabra_secreta:
       if letra in self.letras_adivinadas:
-        resultado += letra
+        resultado += letra + " "
       else:
-        resultado += "_"
+        resultado += "_ "
+    resultado = resultado[:-1]
     return resultado
   
   
