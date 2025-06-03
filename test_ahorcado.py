@@ -47,6 +47,33 @@ class TestAhorcado(unittest.TestCase):
     #Verifica que la letra este dentro de las letras adivinadas.
     self.assertIn("a", juego.letras_adivinadas)
 
+  def test_derrota_sin_intentos(self):
+    juego = Ahorcado("sol", intentos_maximos=2)
+
+    #Se intenta la primer letra incorrecta 
+    juego.arriesgar_letra("x")
+
+    #Verificar que el juego no termine en victoria.
+    self.assertFalse(juego.victoria)
+    #Verificar que le queda un intento mas.
+    self.assertEqual(juego.intentos_restantes, 1)
+    #Verificar que el juego no termino.
+    self.assertFalse(juego.juego_terminado)
+
+    #Se intenta la segunda letra incorrecta
+    juego.arriesgar_letra("y")
+
+    #Verificar que el juego no termine en victoria.
+    self.assertFalse(juego.victoria)
+    #Verificar que no le quedan mas intentos.
+    self.assertEqual(juego.intentos_restantes, 0)
+    #Verificar que el juego termino
+    self.assertTrue(juego.juego_terminado)
+
+  # def test_palabra_actual_inicio(self):
+  #   juego = Ahorcado("hola")
+  #   self.assertEqual(juego.palabra_actual(), "____")
+
 
 
 if __name__ == "__main__":
