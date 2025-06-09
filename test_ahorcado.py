@@ -110,7 +110,7 @@ class TestAhorcado(unittest.TestCase):
     intentos_antes = juego.intentos_restantes
     
     #No se puede jugar luego de ganar 
-    self.assertFalse(juego.arriesgar_letra("p"))  
+    self.assertFalse(juego.arriesgar_letra("p"))
 
 if __name__ == "__main__":
   unittest.main()
