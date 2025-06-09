@@ -1,0 +1,23 @@
+name: Lint Python code
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install pylint
+        run: pip install pylint
+
+      - name: Run pylint (ignore non-zero exit)
+        run: |
+          PYTHONPATH=. pylint ahorcado.py || true
+          PYTHONPATH=. pylint tests/test_ahorcado.py || true
