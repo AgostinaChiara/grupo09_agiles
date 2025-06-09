@@ -53,6 +53,6 @@ class Ahorcado:
                 resultado += letra + " "
             else:
                 resultado += "_ "
-                resultado = resultado[:-1]
-            return resultado
+        resultado = resultado[:-1]
+        return resultado
   
