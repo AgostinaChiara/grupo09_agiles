@@ -138,9 +138,8 @@ class TestAhorcado(unittest.TestCase):
 
     def test_ganar_adivinando_todas_las_letras(self):
         """
-        Verifica que el juego termine con victoria al adivinar todas las letras 
+        Verifica que el juego termine con victoria al adivinar todas las letras
         correctamente una por una, sin arriesgar la palabra completa.
-        Esto cubre la lógica del método _verificar_victoria.
         """
         juego = Ahorcado("sol")
 
@@ -153,5 +152,15 @@ class TestAhorcado(unittest.TestCase):
         self.assertTrue(juego.juego_terminado)
         self.assertTrue(juego.victoria)
 
+    def test_palabra_actual_con_letras_repetidas(self):
+        '''
+        Verificar que la palabra actual no muestre
+        letras que no hayan sido adivinadas aún
+        '''
+        juego = Ahorcado("banana")
+        juego.arriesgar_letra("a")
+        # La 'a' aparece 3 veces y debería mostrarlas todas
+        self.assertEqual(juego.palabra_actual(), "_ a _ a _ a")
+
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main() # pragma: no cover
