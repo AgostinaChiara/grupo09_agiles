@@ -37,7 +37,7 @@ class Ahorcado:
         if letra in self.palabra_secreta:
             self._verificar_victoria()
             return True
-        
+
         self.intentos_restantes -= 1
 
         if self.intentos_restantes <= 0:
