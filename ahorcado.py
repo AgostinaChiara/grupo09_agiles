@@ -37,13 +37,13 @@ class Ahorcado:
         if letra in self.palabra_secreta:
             self._verificar_victoria()
             return True
-        else:
-            self.intentos_restantes -= 1
+        
+        self.intentos_restantes -= 1
 
-            if self.intentos_restantes <= 0:
-                self.juego_terminado = True
+        if self.intentos_restantes <= 0:
+            self.juego_terminado = True
 
-            return False
+        return False
 
     def arriesgar_palabra(self, palabra_intento):
         '''
