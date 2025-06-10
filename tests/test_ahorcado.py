@@ -9,6 +9,8 @@ del juego del Ahorcado, incluyendo:
 - Visualización de la palabra parcial.
 - Manejo de entradas en mayúsculas y minúsculas.
 """
+# tests/test_ahorcado.py
+# pylint: disable=wrong-import-position
 
 import sys
 import os
