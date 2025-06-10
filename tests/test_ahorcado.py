@@ -136,5 +136,22 @@ class TestAhorcado(unittest.TestCase):
         #No se puede jugar luego de ganar
         self.assertFalse(juego.arriesgar_letra("p"))
 
+    def test_ganar_adivinando_todas_las_letras(self):
+        """
+        Verifica que el juego termine con victoria al adivinar todas las letras 
+        correctamente una por una, sin arriesgar la palabra completa.
+        Esto cubre la lógica del método _verificar_victoria.
+        """
+        juego = Ahorcado("sol")
+
+        # Adivinar todas las letras correctamente, una por una
+        juego.arriesgar_letra("s")
+        juego.arriesgar_letra("o")
+        juego.arriesgar_letra("l")
+
+        # Verificar que se ejecutó la lógica de victoria
+        self.assertTrue(juego.juego_terminado)
+        self.assertTrue(juego.victoria)
+
 if __name__ == "__main__":
     unittest.main()
