@@ -1,4 +1,14 @@
+'''
+Archivo .py para el TPI de la materia Metodologias Agiles  
+'''
+
 class Ahorcado:
+    '''
+    Clase que representa el juego del Ahorcado.
+
+    Administra el estado del juego, las letras adivinadas,
+    y verifica condiciones de victoria o derrota.
+    '''
     def __init__(self, palabra, intentos_maximos=6):
         self.palabra_secreta = palabra.lower()
         self.intentos_maximos = intentos_maximos
@@ -17,32 +27,32 @@ class Ahorcado:
             return True
         else:
             self.intentos_restantes -= 1
-            
+
             if self.intentos_restantes <= 0:
                 self.juego_terminado = True
           
             return False
-      
+
     def arriesgar_palabra(self, palabra_intento):
         palabra_intento = palabra_intento.lower()
-      
+
         if palabra_intento == self.palabra_secreta:
             self.juego_terminado = True
             self.victoria = True
             return True
         else:
             self.intentos_restantes -= 1
-        
+
         if self.intentos_restantes <= 0:
             self.juego_terminado = True
         
             return False  
-      
+
     def _verificar_victoria(self):
         for letra in self.palabra_secreta:
-          if letra not in self.letras_adivinadas:
-              return
-      
+            if letra not in self.letras_adivinadas:
+                return
+
         self.juego_terminado = True
         self.victoria = True
 
