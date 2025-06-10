@@ -58,12 +58,9 @@ class Ahorcado:
             self.juego_terminado = True
             self.victoria = True
             return True
-        self.intentos_restantes -= 1
 
-        if self.intentos_restantes <= 0:
-            self.juego_terminado = True
-
-            return False
+        self.juego_terminado = True
+        return False
 
     def _verificar_victoria(self):
         '''
