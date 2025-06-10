@@ -32,7 +32,9 @@ class TestAhorcado(unittest.TestCase):
     #   self.assertTrue(juego.victoria)
 
     def test_adivinar_palabra_incorrecta(self):
-        """Verifica que adivinar incorrectamente una palabra reduce los intentos y no da victoria."""
+        """Verifica que adivinar incorrectamente una palabra
+        reduce los intentos y no da victoria.
+        """
         juego = Ahorcado("ahorcado", intentos_maximos=1)
         resultado = juego.arriesgar_palabra("pasapalabra")
         self.assertFalse(resultado)
