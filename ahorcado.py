@@ -1,6 +1,16 @@
 '''
 Archivo .py para el TPI de la materia Metodologias Agiles  
 '''
+import json
+import random
+import os
+
+# Abrir y cargar el archivo JSON
+ruta_actual = os.path.dirname(__file__)  # Carpeta donde está ahorcado.py
+ruta_json = os.path.join(ruta_actual, "palabras.json")
+
+with open(ruta_json, "r", encoding="utf-8") as archivo:
+    datos = json.load(archivo)
 
 class Ahorcado:
     '''
@@ -9,17 +19,21 @@ class Ahorcado:
     Administra el estado del juego, las letras adivinadas,
     y verifica condiciones de victoria o derrota.
     '''
-    def __init__(self, palabra, intentos_maximos=6):
+
+    #Definimos las variables globales de la clase
+    palabras = datos
+
+    def __init__(self, dificultad=1, intentos_maximos=6):
         '''
         Inicializa el juego del ahorcado con la palabra secreta y los intentos máximos.
 
         :param palabra: Palabra a adivinar.
         :param intentos_maximos: Cantidad máxima de intentos permitidos.
         '''
-        self.palabra_secreta = palabra.lower()
+        self.palabra_secreta = self.palabras[str(dificultad)][random.randint(0,29)]
         self.intentos_maximos = intentos_maximos
         self.intentos_restantes = intentos_maximos
-        self.letras_adivinadas = set()
+        self.letras_adivinadas = list()
         self.juego_terminado = False
         self.victoria = False
 
@@ -31,7 +45,7 @@ class Ahorcado:
         :return: True si la letra está en la palabra, False en caso contrario.
         '''
         letra = letra.lower()
-        self.letras_adivinadas.add(letra)
+        self.letras_adivinadas.append(letra)
         if self.juego_terminado:
             return False
         if letra in self.palabra_secreta:
@@ -87,4 +101,3 @@ class Ahorcado:
                 resultado += "_ "
         resultado = resultado[:-1]
         return resultado
-  
