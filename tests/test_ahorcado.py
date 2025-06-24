@@ -117,82 +117,82 @@ class TestAhorcado(unittest.TestCase):
         p_actual = juego.palabra_actual()
         self.assertEqual(p_actual, actual[:-1])
 
-    # def test_palabra_actual_inicio(self):
-    #     """Verifica que al inicio, la palabra actual solo muestra guiones bajos."""
-    #     juego = Ahorcado(3)
-    #     secreta = juego.palabra_secreta
-    #     actual = juego.palabra_actual()
-    #     guiones_esperados = "_ " * len(secreta)
-    #     guiones_esperados = guiones_esperados.strip()
+    def test_palabra_actual_inicio(self):
+        """Verifica que al inicio, la palabra actual solo muestra guiones bajos."""
+        juego = Ahorcado(3)
+        secreta = juego.palabra_secreta
+        actual = juego.palabra_actual()
+        guiones_esperados = "_ " * len(secreta)
+        guiones_esperados = guiones_esperados.strip()
             
-    #     print("Secreta:", secreta)
-    #     print("Palabra actual:", actual)
+        print("Secreta:", secreta)
+        print("Palabra actual:", actual)
             
-    #     self.assertEqual(actual, guiones_esperados)
+        self.assertEqual(actual, guiones_esperados)
 
 
-    # def test_palabra_actual_con_letras_adivinadas(self):
-    #     """Verifica que la palabra actual refleje correctamente las letras adivinadas."""
-    #     juego = Ahorcado("hola")
-    #     #Se arriesga la primer letra para ver si se encuentra en la palabra
-    #     juego.arriesgar_letra("h")
+    def test_palabra_actual_con_letras_adivinadas(self):
+        """Verifica que la palabra actual refleje correctamente las letras adivinadas."""
+        juego = Ahorcado(3)
+        secreta = juego.palabra_secreta
+        #Se arriesga la primer letra para ver si se encuentra en la palabra
+        juego.arriesgar_letra(secreta[0])
+        actual = []
+        for c in secreta:
+            actual.append(c if c==secreta[0] else "_")
+        
+        actual = " ".join(actual)
+        
+        #Verifica que la funcion palabra actual devuelva las letras adivinadas en su orden correcto
+        self.assertEqual(juego.palabra_actual(), actual)
 
-    #     #Verifica que la funcion palabra actual devuelva las letras adivinadas en su orden correcto
-    #     self.assertEqual(juego.palabra_actual(), "h _ _ _")
-    #     self.assertNotEqual(juego.palabra_actual(), "_ h _ _")
-    #     self.assertNotEqual(juego.palabra_actual(), "h _ h _")
+        #Se arriesga la ultima letra para ver si se encuentra en la palabra
+        juego.arriesgar_letra(secreta[1])
+        actual = []
+        for c in secreta:
+            actual.append(c if c==secreta[1] or c==secreta[0] else "_")
+        
+        actual = " ".join(actual)
 
-    #     #Se arriesga la ultima letra para ver si se encuentra en la palabra
-    #     juego.arriesgar_letra("a")
+        #Verifica que la funcion palabra actual devuelva las letras adivinadas en su orden correcto
+        self.assertEqual(juego.palabra_actual(), actual)
 
-    #     #Verifica que la funcion palabra actual devuelva las letras adivinadas en su orden correcto
-    #     self.assertEqual(juego.palabra_actual(), "h _ _ a")
-    #     self.assertNotEqual(juego.palabra_actual(), "_ _ _ a")
-    #     self.assertNotEqual(juego.palabra_actual(), "h _ _ _")
+    def test_palabra_en_minusculas(self):
+        """Test que la palabra se convierte a minúsculas"""
+        juego = Ahorcado(2)
+        secreta = juego.palabra_secreta
+        #Verifica que la palabra secreta se convierta a minúscula
+        self.assertEqual(juego.palabra_secreta, secreta.lower())
+        #Verifica que la palabra secreta no siga en mayúscula
+        self.assertNotEqual(juego.palabra_secreta, secreta.upper())
 
-    # def test_palabra_en_mayusculas_se_convierte_a_minusculas(self):
-    #     """Test que la palabra se convierte a minúsculas"""
-    #     juego = Ahorcado("PYTHON")
-    #     #Verifica que la palabra secreta se convierta a minúscula
-    #     self.assertEqual(juego.palabra_secreta, "python")
-    #     #Verifica que la palabra secreta no siga en mayúscula
-    #     self.assertNotEqual(juego.palabra_secreta, "PYTHON")
+    def test_no_se_puede_continuar_despues_de_ganar(self):
+        """Verifica que no se pueda seguir jugando después de ganar el juego."""
+        juego = Ahorcado(2)
+        secreta = juego.palabra_secreta
+        juego.arriesgar_palabra(secreta)
+        self.assertTrue(juego.juego_terminado)
+        self.assertTrue(juego.victoria)
 
-    # def test_no_se_puede_continuar_despues_de_ganar(self):
-    #     """Verifica que no se pueda seguir jugando después de ganar el juego."""
-    #     juego = Ahorcado("python")
-    #     juego.arriesgar_palabra("python")
-    #     self.assertTrue(juego.juego_terminado)
-    #     self.assertTrue(juego.victoria)
+        #No se puede jugar luego de ganar
+        self.assertFalse(juego.arriesgar_letra("p"))
 
-    #     #No se puede jugar luego de ganar
-    #     self.assertFalse(juego.arriesgar_letra("p"))
+    def test_ganar_adivinando_todas_las_letras(self):
+        """
+        Verifica que el juego termine con victoria al adivinar todas las letras
+        correctamente una por una, sin arriesgar la palabra completa.
+        """
+        juego = Ahorcado(1)
+        secreta = juego.palabra_secreta
 
-    # def test_ganar_adivinando_todas_las_letras(self):
-    #     """
-    #     Verifica que el juego termine con victoria al adivinar todas las letras
-    #     correctamente una por una, sin arriesgar la palabra completa.
-    #     """
-    #     juego = Ahorcado("sol")
+        # Adivinar todas las letras correctamente, una por una
+        secreta = set(secreta)
+        for letra in secreta:
+            juego.arriesgar_letra(letra)
 
-    #     # Adivinar todas las letras correctamente, una por una
-    #     juego.arriesgar_letra("s")
-    #     juego.arriesgar_letra("o")
-    #     juego.arriesgar_letra("l")
-
-    #     # Verificar que se ejecutó la lógica de victoria
-    #     self.assertTrue(juego.juego_terminado)
-    #     self.assertTrue(juego.victoria)
-
-    # def test_palabra_actual_con_letras_repetidas(self):
-    #     '''
-    #     Verificar que la palabra actual no muestre
-    #     letras que no hayan sido adivinadas aún
-    #     '''
-    #     juego = Ahorcado("banana")
-    #     juego.arriesgar_letra("a")
-    #     # La 'a' aparece 3 veces y debería mostrarlas todas
-    #     self.assertEqual(juego.palabra_actual(), "_ a _ a _ a")
+        # Verificar que se ejecutó la lógica de victoria
+        self.assertTrue(juego.juego_terminado)
+        self.assertTrue(juego.victoria)
 
 if __name__ == "__main__":
     unittest.main() # pragma: no cover
