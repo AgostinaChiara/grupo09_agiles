@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Juego del Ahorcado</title>
+    <style>
+        body {
+            background-color: #f0f4f8;
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cartel {
+            background-color: #ffffff;
+            padding: 2rem 3rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .cartel h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .cartel p {
+            font-size: 1.2rem;
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="cartel">
+        <h1>¡Comienza el juego!</h1>
+        <p>Dificultad seleccionada: <strong id="nivel"></strong></p>
+    </div>
+
+    <script>
+        const dificultad = localStorage.getItem('dificultadAhorcado');
+        document.getElementById('nivel').textContent = dificultad ?? "no seleccionada";
+    </script>
+</body>
+</html>

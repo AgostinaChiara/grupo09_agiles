@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahorcado</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="icono-ahorcado">🎯</div>
+        <h1 class="titulo-juego">AHORCADO</h1>
+        <p class="subtitulo-juego">Gana si podes!</p>
+        
+        <div class="seleccion-dificultad">
+            <h2 class="seccion-titulo">Elige tu dificultad</h2>
+            <div class="botones-dificultad">
+                <button class="btn-dificultad facil" onclick="elegirDificultad('facil')">
+                    facil
+                </button>
+                <button class="btn-dificultad medio" onclick="elegirDificultad('medio')">
+                    medio
+                </button>
+                <button class="btn-dificultad dificil" onclick="elegirDificultad('dificil')">
+                    dificil
+                </button>
+            </div>
+        </div>
+
+
+        <div class="footer">
+            Buena surte y divertite! 🎮
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='home.js') }}"></script>
+</body>
+</html>
