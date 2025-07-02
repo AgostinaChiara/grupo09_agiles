@@ -2,46 +2,60 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Juego del Ahorcado</title>
-    <style>
-        body {
-            background-color: #f0f4f8;
-            font-family: Arial, sans-serif;
-            display: flex;
-            height: 100vh;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cartel {
-            background-color: #ffffff;
-            padding: 2rem 3rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .cartel h1 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #2d3748;
-        }
-
-        .cartel p {
-            font-size: 1.2rem;
-            color: #4a5568;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahorcado - Jugar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='juego.css') }}">
 </head>
 <body>
-    <div class="cartel">
-        <h1>¡Comienza el juego!</h1>
-        <p>Dificultad seleccionada: <strong id="nivel"></strong></p>
+    <div class="juego-container">
+        <div class="juego-header">
+            <button class="boton-inicio" onclick="volverInicio()">← Atras</button>
+            <h1 class="titulo-juego">AHORCADO</h1>
+            <div class="dificultad-elegida" id="dificultadElegida">Medio</div>
+        </div>
+
+        <div class="contenido-juego">
+            <div class="seccion-ahorcado">
+                <div class="dibujo-ahorcado">
+                    <svg class="hangman-svg" viewBox="0 0 200 250">
+                        <!-- Estructura -->
+                        <line x1="10" y1="230" x2="150" y2="230" stroke="#8B4513" stroke-width="4"/>
+                        <line x1="30" y1="230" x2="30" y2="20" stroke="#8B4513" stroke-width="4"/>
+                        <line x1="30" y1="20" x2="120" y2="20" stroke="#8B4513" stroke-width="4"/>
+                        <line x1="120" y1="20" x2="120" y2="50" stroke="#8B4513" stroke-width="4"/>
+                        
+                        <!-- Partes persona -->
+                        <circle id="head" cx="120" cy="65" r="15" stroke="#333" stroke-width="3" fill="none" style="display: none"/>
+                        <line id="body" x1="120" y1="80" x2="120" y2="150" stroke="#333" stroke-width="3" style="display: none"/>
+                        <line id="leftArm" x1="120" y1="100" x2="90" y2="130" stroke="#333" stroke-width="3" style="display: none"/>
+                        <line id="rightArm" x1="120" y1="100" x2="150" y2="130" stroke="#333" stroke-width="3" style="display: none"/>
+                        <line id="leftLeg" x1="120" y1="150" x2="90" y2="180" stroke="#333" stroke-width="3" style="display: none"/>
+                        <line id="rightLeg" x1="120" y1="150" x2="150" y2="180" stroke="#333" stroke-width="3" style="display: none"/>
+                    </svg>
+                </div>
+
+                <div class="info-juego">
+                    <div class="errores">Errores: <span id="cantErrores">0</span></div>
+                    <div class="intentos-restantes">Intentos restantes: <span id="intentosRestantes">6</span></div>
+                </div>
+
+                
+            </div>
+
+            <div class="seccion-palabra">
+                <div class="mostrar-palabra" id="mostrarPalabra"></div>
+
+                <div class="mensaje-juego" id="mensajeJuego"></div>
+
+                <div class="grid-teclado" id="gridTeclado"></div>
+
+                <div class="controles-juego">
+                    <button class="control-btn" onclick="juegoNuevo()">Juego nuevo</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script>
-        const dificultad = localStorage.getItem('dificultadAhorcado');
-        document.getElementById('nivel').textContent = dificultad ?? "no seleccionada";
-    </script>
+    <script src="{{ url_for('static', filename='juego.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,276 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 0.1rem;
+    color: #333;
+}
+
+.juego-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+}
+
+.juego-header {
+    background: linear-gradient(45deg, #4a5568, #2d3748);
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+}
+
+.titulo-juego {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.dificultad-elegida {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.dificultad-facil { background: #48bb78; }
+.dificultad-medio { background: #ed8936; }
+.dificultad-dificil { background: #e53e3e; }
+
+.boton-inicio {
+    position: absolute;
+    left: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.boton-inicio:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.contenido-juego {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.seccion-ahorcado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dibujo-ahorcado {
+    width: 300px;
+    height: 350px;
+    border: 2px solid #4a5568;
+    border-radius: 10px;
+    background: #f7fafc;
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.hangman-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.info-juego {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.errores {
+    font-size: 1.2rem;
+    color: #e53e3e;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.intentos-restantes {
+    color: #4a5568;
+    font-size: 1rem;
+}
+
+.seccion-palabra {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.mostrar-palabra {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4a5568;
+    letter-spacing: 0.5rem;
+    margin-bottom: 1rem;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.letra-box {
+    display: inline-block;
+    width: 3rem;
+    height: 3rem;
+    border-bottom: 3px solid #4a5568;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.25rem;
+}
+
+.grid-teclado {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.letra-btn {
+    background: linear-gradient(45deg, #4299e1, #3182ce);
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.letra-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(66, 153, 225, 0.4);
+}
+
+.letra-btn:disabled {
+    background: #cbd5e0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.letra-btn.correct {
+    background: linear-gradient(45deg, #48bb78, #38a169);
+}
+
+.letra-btn.incorrect {
+    background: linear-gradient(45deg, #e53e3e, #c53030);
+}
+
+.controles-juego {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.control-btn {
+    background: linear-gradient(45deg, #805ad5, #6b46c1);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(128, 90, 213, 0.4);
+}
+
+.mensaje-juego {
+    text-align: center;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: none;
+}
+
+.mensaje-juego.win {
+    background: #c6f6d5;
+    color: #22543d;
+    border: 2px solid #48bb78;
+}
+
+.mensaje-juego.lose {
+    background: #fed7d7;
+    color: #742a2a;
+    border: 2px solid #e53e3e;
+}
+
+.mensaje-juego.show {
+    display: block;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .contenido-juego {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .mostrar-palabra {
+        font-size: 2rem;
+    }
+
+    .grid-teclado {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .boton-inicio {
+        position: static;
+        transform: none;
+        margin-bottom: 1rem;
+    }
+
+    .juego-header {
+        text-align: left;
+        padding: 1rem;
+    }
+}
