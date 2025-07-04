@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Entornos virtuales
+venv/
+env/
+.venv/
+.env/
+
+# Archivos de entorno
+*.env
+
+# Flask
+instance/
+*.db
+*.sqlite3
+
+# VS Code
+.vscode/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de log
+*.log
+
+# HTML temporales o de pruebas (si los generás)
+*.bak
+*.tmp
+
+# Compilados
+*.egg-info/
+dist/
+build/

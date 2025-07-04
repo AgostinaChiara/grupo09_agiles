@@ -6,7 +6,7 @@ import time
 @given('el usuario está en la página principal del ahorcado')
 def step_impl(context):
     context.driver = webdriver.Chrome()
-    context.driver.get("http://localhost:5000/")  # cambia si usás otro nombre
+    context.driver.get("http://localhost:5000/")
     time.sleep(1)
 
 @when('el usuario selecciona la dificultad "{nivel}"')
@@ -17,5 +17,6 @@ def step_impl(context, nivel):
 
 @then('el usuario debería ver la dificultad "{nivel}" en pantalla')
 def step_impl(context, nivel):
-    texto = context.driver.find_element(By.ID, "nivel").text
-    assert texto == nivel
+    badge = context.driver.find_element(By.ID, 'dificultadElegida')
+    texto = badge.text
+    assert texto.lower() == nivel.lower()

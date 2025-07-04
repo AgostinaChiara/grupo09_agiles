@@ -77,7 +77,6 @@ async function adivinarLetra(letra) {
   actualizarAhorcado();
 
   if (juegoTerminado) {
-    console.log(`mensaje-juego ${data.victoria ? 'win' : 'lose'} show`)
     const msg = data.victoria ? "¡Ganaste! 🎉" : `¡Perdiste! 😞 La palabra era: ${data.secreta}`;
     const msjeJuego = document.getElementById("mensajeJuego"); 
     msjeJuego.textContent = msg;
@@ -94,14 +93,12 @@ async function juegoNuevo() {
   const data = await res.json();
 
   palabraActual = data.palabraActual.replace(/ /g, '');
-  console.log(palabraActual)
   letrasAdivinadas = [];
   errores = data.errores;
   erroresMaximos = data.intentosRestantes + data.errores;
   juegoTerminado = false;
   idJuego = data.idJuego;
 
-  console.log(data.sesion)
 
   actualizarMostrarDificultad();
   crearTeclado();
@@ -109,6 +106,7 @@ async function juegoNuevo() {
   document.getElementById("cantErrores").textContent = errores;
   document.getElementById("intentosRestantes").textContent = data.intentosRestantes;
   document.getElementById("mensajeJuego").className = "mensaje-juego";
+  document.getElementById("palabra-secreta").textContent = data.palabra_secreta;
   resetearAhorcado();
 }
 
