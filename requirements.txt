@@ -1,4 +1,5 @@
 Flask
+coverage
 python-dotenv
 selenium
 behave
