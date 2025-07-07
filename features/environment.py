@@ -1,7 +1,5 @@
 from selenium import webdriver
 import tempfile
-import os
-import signal
 import psutil
 
 def before_all(context):
