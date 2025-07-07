@@ -34,11 +34,16 @@ jobs:
 
       - name: Start web server
         run: |
-          nohup python app.py &
+          nohup python app.py > flask.log 2>&1 &
 
-      - name: Wait for server
+      - name: Wait for server to be ready
         run: |
-          npx wait-on http://localhost:5000
+          for i in {1..10}; do
+            echo "Esperando que Flask esté disponible..."
+            curl -s http://localhost:5000 && break
+            sleep 2
+          done
+          echo "Servidor Flask iniciado"
 
       - name: Run unit tests
         run: |
