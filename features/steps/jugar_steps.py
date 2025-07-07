@@ -4,6 +4,8 @@ from selenium.webdriver.common.by import By
 import time
 import os
 from dotenv import load_dotenv
+import tempfile
+from selenium.webdriver.chrome.options import Options
 
 LETRAS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 load_dotenv()
@@ -12,7 +14,9 @@ TEST_SECRET = os.getenv("TEST_SECRET")
 
 @given('el jugador inicia una nueva partida')
 def step_impl(context):
-    context.driver = webdriver.Chrome()
+    options = Options()
+    options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
+    context.driver = webdriver.Chrome(options=options)
     context.driver.get(f"http://localhost:5000/juego?test={TEST_SECRET}")
     time.sleep(1)
 
