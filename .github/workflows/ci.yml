@@ -24,6 +24,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+          - name: Install Chrome
+          run: |
+            sudo apt-get update
+            sudo apt-get install -y google-chrome-stable
+
+      - name: Install ChromeDriver
+        run: |
+          CHROME_VERSION=$(google-chrome --version | grep -oP '[\d.]+')
+          wget -N https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+
       - name: Compile check (syntax only)
         run: python -m py_compile ahorcado.py
 
