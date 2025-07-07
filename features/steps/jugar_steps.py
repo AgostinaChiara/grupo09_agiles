@@ -1,8 +1,10 @@
 from behave import given, when, then
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 import time
 import os
+import tempfile
 from dotenv import load_dotenv
 
 LETRAS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -12,7 +14,13 @@ TEST_SECRET = os.getenv("TEST_SECRET")
 
 @given('el jugador inicia una nueva partida')
 def step_impl(context):
-    context.driver = webdriver.Chrome()
+    chrome_options = Options()
+    chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
+
+    context.driver = webdriver.Chrome(options=chrome_options)
     context.driver.get(f"http://localhost:5000/juego?test={TEST_SECRET}")
     time.sleep(1)
 
@@ -20,9 +28,8 @@ def step_impl(context):
 def step_impl(context):
     secreta = context.driver.find_element(By.ID, "palabra-secreta").text.upper()
     estan = set(secreta)
-    print("LETRAS!!!!: ",estan)
     for l in estan:
-        btn = context.driver.find_element(By.ID,f"btn-{l}")
+        btn = context.driver.find_element(By.ID, f"btn-{l}")
         btn.click()
         time.sleep(1)
 
@@ -30,15 +37,9 @@ def step_impl(context):
 def step_impl(context):
     secreta = context.driver.find_element(By.ID, "palabra-secreta").text.upper()
     estan = set(secreta)
-    no_estan = list()
-    pos = 0
-    while len(no_estan)<6:
-        if LETRAS[pos] not in estan:
-            no_estan.append(LETRAS[pos])
-        pos+=1
-
+    no_estan = [l for l in LETRAS if l not in estan][:6]
     for l in no_estan:
-        btn = context.driver.find_element(By.ID,f"btn-{l}")
+        btn = context.driver.find_element(By.ID, f"btn-{l}")
         btn.click()
         time.sleep(1)
 
@@ -46,21 +47,10 @@ def step_impl(context):
 def step_impl(context):
     secreta = context.driver.find_element(By.ID, "palabra-secreta").text.upper()
     estan = list(set(secreta))
-    no_estan = list()
-    pos = 0
-    while len(no_estan)<4:
-        if LETRAS[pos] not in estan:
-            no_estan.append(LETRAS[pos])
-        pos+=1
-    orden = list()
-    orden.append(estan[0])
-    orden.extend(no_estan[0:2])
-    orden.append(estan[1])
-    orden.extend(no_estan[2:4])
-    orden.extend(estan[2:])
-    
+    no_estan = [l for l in LETRAS if l not in estan][:4]
+    orden = [estan[0]] + no_estan[:2] + [estan[1]] + no_estan[2:] + estan[2:]
     for l in orden:
-        btn = context.driver.find_element(By.ID,f"btn-{l}")
+        btn = context.driver.find_element(By.ID, f"btn-{l}")
         btn.click()
         time.sleep(1)
 
@@ -68,24 +58,13 @@ def step_impl(context):
 def step_impl(context):
     secreta = context.driver.find_element(By.ID, "palabra-secreta").text.upper()
     estan = list(set(secreta))
-    no_estan = list()
-    pos = 0
-    while len(no_estan)<6:
-        if LETRAS[pos] not in estan:
-            no_estan.append(LETRAS[pos])
-        pos+=1
-    orden = list()
-    orden.append(no_estan[0])
-    orden.append(estan[0])
-    orden.append(no_estan[1])
-    orden.extend(estan[1])
-    orden.extend(no_estan[2:])
-    
+    no_estan = [l for l in LETRAS if l not in estan][:6]
+    orden = [no_estan[0], estan[0], no_estan[1], estan[1]] + no_estan[2:]
     for l in orden:
-        btn = context.driver.find_element(By.ID,f"btn-{l}")
+        btn = context.driver.find_element(By.ID, f"btn-{l}")
         btn.click()
         time.sleep(1)
-    
+
 @then('el jugador pierde la partida')
 def step_impl(context):
     badge = context.driver.find_element(By.ID, 'mensajeJuego')
