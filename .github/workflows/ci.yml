@@ -34,7 +34,7 @@ jobs:
 
       - name: Start web server
         run: |
-          nohup python app.py > flask.log 2>&1 &
+          nohup python web/app.py > flask.log 2>&1 &
 
       - name: Wait for server to be ready
         run: |
