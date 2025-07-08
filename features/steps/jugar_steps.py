@@ -2,6 +2,8 @@ from behave import given, when, then
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
 import tempfile
@@ -95,12 +97,18 @@ def step_impl(context):
 
 @then('el jugador pierde la partida')
 def step_impl(context):
+    WebDriverWait(context.driver, 10).until(
+        EC.text_to_be_present_in_element((By.ID, 'mensajeJuego'), '¡Perdiste!')
+    )
     badge = context.driver.find_element(By.ID, 'mensajeJuego')
     texto = badge.text
     assert '¡Perdiste!' in texto
 
 @then('el jugador gana la partida')
 def step_impl(context):
+    WebDriverWait(context.driver, 10).until(
+        EC.text_to_be_present_in_element((By.ID, 'mensajeJuego'), '¡Perdiste!')
+    )
     badge = context.driver.find_element(By.ID, 'mensajeJuego')
     texto = badge.text
     assert '¡Ganaste!' in texto
