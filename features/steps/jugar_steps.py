@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 LETRAS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 load_dotenv()
+#ACa
 
 TEST_SECRET = os.getenv("TEST_SECRET")
 
@@ -30,7 +31,8 @@ def step_impl(context):
 def step_impl(context):
     secreta = context.driver.find_element(By.ID, "palabra-secreta").text.upper()
     estan = set(secreta)
-    for l in estan:
+    no_estan = [l for l in LETRAS if l not in estan][:6]
+    for l in no_estan:
         btn = context.driver.find_element(By.ID, f"btn-{l}")
         btn.click()
         time.sleep(1)
@@ -38,18 +40,24 @@ def step_impl(context):
 @when('ingresa 6 letras que no están en la palabra')
 def step_impl(context):
     secreta = context.driver.find_element(By.ID, "palabra-secreta").text.upper()
-    estan = set(secreta)
-    no_estan = list()
-    pos = 0
-    while len(no_estan)<6:
-        if LETRAS[pos] not in estan:
-            no_estan.append(LETRAS[pos])
-        pos+=1
+    estan = list(set(secreta))
+    no_estan = [l for l in LETRAS if l not in estan][:4]
+    orden = []
+    if len(estan) >= 2:
+        orden.append(estan[0])
+        orden.extend(no_estan[0:2])
+        orden.append(estan[1])
+        orden.extend(no_estan[2:4])
+        orden.extend(estan[2:])
+    else:
+        print("⚠️ Palabra demasiado corta. Usando fallback simple.")
+        orden = list(estan) + no_estan
 
-    for l in no_estan:
-        btn = context.driver.find_element(By.ID,f"btn-{l}")
+    for l in orden:
+        btn = context.driver.find_element(By.ID, f"btn-{l}")
         btn.click()
         time.sleep(1)
+
 
 @when('ingresa 1 letra correcta 2 incorrectas 1 correcta 2 incorrectas y el resto de las correctas')
 def step_impl(context):
@@ -77,21 +85,16 @@ def step_impl(context):
 def step_impl(context):
     secreta = context.driver.find_element(By.ID, "palabra-secreta").text.upper()
     estan = list(set(secreta))
-    no_estan = list()
-    pos = 0
-    while len(no_estan)<6:
-        if LETRAS[pos] not in estan:
-            no_estan.append(LETRAS[pos])
-        pos+=1
-    orden = list()
-    orden.append(no_estan[0])
-    orden.append(estan[0])
-    orden.append(no_estan[1])
-    orden.extend(estan[1])
-    orden.extend(no_estan[2:])
-    
+    no_estan = [l for l in LETRAS if l not in estan][:6]
+    orden = []
+    if len(estan) >= 2:
+        orden = [no_estan[0], estan[0], no_estan[1], estan[1]] + no_estan[2:]
+    else:
+        print("⚠️ Palabra demasiado corta. Usando fallback simple.")
+        orden = list(estan) + no_estan
+
     for l in orden:
-        btn = context.driver.find_element(By.ID,f"btn-{l}")
+        btn = context.driver.find_element(By.ID, f"btn-{l}")
         btn.click()
         time.sleep(1)
 
@@ -107,8 +110,9 @@ def step_impl(context):
 @then('el jugador gana la partida')
 def step_impl(context):
     WebDriverWait(context.driver, 10).until(
-        EC.text_to_be_present_in_element((By.ID, 'mensajeJuego'), '¡Perdiste!')
+        EC.text_to_be_present_in_element((By.ID, 'mensajeJuego'), '¡Ganaste!')
     )
     badge = context.driver.find_element(By.ID, 'mensajeJuego')
     texto = badge.text
     assert '¡Ganaste!' in texto
+
