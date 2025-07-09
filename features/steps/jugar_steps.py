@@ -9,13 +9,14 @@ import os
 import tempfile
 from dotenv import load_dotenv
 
-LETRAS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 load_dotenv()
-#ACa
 
 TEST_SECRET = os.getenv("TEST_SECRET")
 
-@given('el jugador inicia una nueva partida')
+
+
+@given('el jugador está en la pantalla de inicio')
 def step_impl(context):
     chrome_options = Options()
     chrome_options.add_argument("--headless=new")
@@ -27,92 +28,85 @@ def step_impl(context):
     context.driver.get(f"http://localhost:5000/juego?test={TEST_SECRET}")
     time.sleep(1)
 
-@when('ingresa 6 letras que están en la palabra')
+@when('selecciona la dificultad "{dificultad}"')
+def step_impl(context, dificultad):
+    btn = context.driver.find_element(By.ID, f'btn-{dificultad}')
+    btn.click()
+    time.sleep(1)
+
+@then('debería ver la página del juego cargada')
 def step_impl(context):
-    secreta = context.driver.find_element(By.ID, "palabra-secreta").text.upper()
-    estan = set(secreta)
-    no_estan = [l for l in LETRAS if l not in estan][:6]
-    for l in no_estan:
-        btn = context.driver.find_element(By.ID, f"btn-{l}")
+    assert "juego" in context.driver.current_url
+    assert context.driver.find_element(By.ID, "gridTeclado")
+
+@given('el jugador inicia una nueva partida')
+def step_impl(context):
+    context.driver = webdriver.Chrome()
+    context.driver.get(f"http://localhost:5000/juego?test={TEST_SECRET}")
+    time.sleep(3)
+
+@then('debería ver la palabra oculta como guiones bajos')
+def step_impl(context):
+    palabra = context.driver.find_element(By.ID, "palabra-secreta").get_attribute("textContent").strip().upper()
+    letra_incorrecta = [l for l in LETRAS if l not in palabra][:1]
+
+    boxes = context.driver.find_elements(By.CLASS_NAME, 'letra-box')
+    assert len(boxes) > 0
+    for box in boxes:
+        assert box.text == ''
+
+@when('el jugador ingresa una letra que no está en la palabra')
+def step_impl(context):
+    palabra = context.driver.find_element(By.ID, "palabra-secreta").get_attribute("textContent").strip().upper()
+    letra_incorrecta = next((l for l in LETRAS if l not in palabra), None)
+    context.driver.find_element(By.ID, f"btn-{letra_incorrecta}").click()
+    time.sleep(1)
+
+@then('el contador de errores debería incrementarse')
+def step_impl(context):
+    errores = context.driver.find_element(By.ID, "cantErrores").text
+    assert errores == "1"
+
+@when('el jugador ingresa 6 letras incorrectas')
+def step_impl(context):
+    palabra = context.driver.find_element(By.ID, "palabra-secreta").get_attribute("textContent").strip().upper()
+    letras_incorrectas = [l for l in LETRAS if l not in palabra][:6]
+
+    for letra in letras_incorrectas:
+        print(letra)
+        context.driver.find_element(By.ID, f"btn-{letra}").click()
+        time.sleep(0.5)
+
+@then('el jugador debería ver el mensaje de derrota')
+def step_impl(context):
+    wait = WebDriverWait(context.driver, 5)
+    msje = wait.until(EC.visibility_of_element_located((By.ID, "mensajeJuego")))
+    msg = msje.text
+    assert "¡Perdiste!" in msg, f"Mensaje recibido: {msg}"
+
+@then('el jugador debería ver el mensaje de victoria')
+def step_impl(context):
+    wait = WebDriverWait(context.driver, 5)
+    msje = wait.until(EC.visibility_of_element_located((By.ID, "mensajeJuego")))
+    msg = msje.text
+    assert "¡Ganaste!" in msg, f"Mensaje recibido: {msg}"
+
+@when('el jugador hace clic en una letra')
+def step_impl(context):
+    context.letra_usada = 'T'
+    context.driver.find_element(By.ID, f'btn-{context.letra_usada}').click()
+    time.sleep(1)
+
+@then('el botón de esa letra debería estar desactivado')
+def step_impl(context):
+    boton = context.driver.find_element(By.ID, f'btn-{context.letra_usada}')
+    assert boton.get_attribute("disabled") == "true"
+
+@when('el jugador presiona todas las letras correctas de la palabra')
+def step_impl(context):
+    palabra = context.driver.find_element(By.ID, "palabra-secreta").get_attribute("textContent").strip().upper()
+    letras_unicas = sorted(set(palabra))
+    for letra in letras_unicas:
+        btn = context.driver.find_element(By.ID, f"btn-{letra}")
         btn.click()
-        time.sleep(1)
-
-@when('ingresa 6 letras que no están en la palabra')
-def step_impl(context):
-    secreta = context.driver.find_element(By.ID, "palabra-secreta").text.upper()
-    estan = list(set(secreta))
-    no_estan = [l for l in LETRAS if l not in estan][:4]
-    orden = []
-    if len(estan) >= 2:
-        orden.append(estan[0])
-        orden.extend(no_estan[0:2])
-        orden.append(estan[1])
-        orden.extend(no_estan[2:4])
-        orden.extend(estan[2:])
-    else:
-        print("⚠️ Palabra demasiado corta. Usando fallback simple.")
-        orden = list(estan) + no_estan
-
-    for l in orden:
-        btn = context.driver.find_element(By.ID, f"btn-{l}")
-        btn.click()
-        time.sleep(1)
-
-
-@when('ingresa 1 letra correcta 2 incorrectas 1 correcta 2 incorrectas y el resto de las correctas')
-def step_impl(context):
-    secreta = context.driver.find_element(By.ID, "palabra-secreta").text.upper()
-    estan = list(set(secreta))
-    no_estan = list()
-    pos = 0
-    while len(no_estan)<4:
-        if LETRAS[pos] not in estan:
-            no_estan.append(LETRAS[pos])
-        pos+=1
-    orden = list()
-    orden.append(estan[0])
-    orden.extend(no_estan[0:2])
-    orden.append(estan[1])
-    orden.extend(no_estan[2:4])
-    orden.extend(estan[2:])
-    
-    for l in orden:
-        btn = context.driver.find_element(By.ID,f"btn-{l}")
-        btn.click()
-        time.sleep(1)
-
-@when('ingresa 1 letra incorrecta 1 correcta 1 incorrecta 1 correcta 4 incorrectas')
-def step_impl(context):
-    secreta = context.driver.find_element(By.ID, "palabra-secreta").text.upper()
-    estan = list(set(secreta))
-    no_estan = [l for l in LETRAS if l not in estan][:6]
-    orden = []
-    if len(estan) >= 2:
-        orden = [no_estan[0], estan[0], no_estan[1], estan[1]] + no_estan[2:]
-    else:
-        print("⚠️ Palabra demasiado corta. Usando fallback simple.")
-        orden = list(estan) + no_estan
-
-    for l in orden:
-        btn = context.driver.find_element(By.ID, f"btn-{l}")
-        btn.click()
-        time.sleep(1)
-
-@then('el jugador pierde la partida')
-def step_impl(context):
-    WebDriverWait(context.driver, 10).until(
-        EC.text_to_be_present_in_element((By.ID, 'mensajeJuego'), '¡Perdiste!')
-    )
-    badge = context.driver.find_element(By.ID, 'mensajeJuego')
-    texto = badge.text
-    assert '¡Perdiste!' in texto
-
-@then('el jugador gana la partida')
-def step_impl(context):
-    WebDriverWait(context.driver, 10).until(
-        EC.text_to_be_present_in_element((By.ID, 'mensajeJuego'), '¡Ganaste!')
-    )
-    badge = context.driver.find_element(By.ID, 'mensajeJuego')
-    texto = badge.text
-    assert '¡Ganaste!' in texto
-
+        time.sleep(0.3)

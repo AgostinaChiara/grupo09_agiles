@@ -1,21 +1,25 @@
 Feature: Partida del juego del Ahorcado
 
-  Scenario: El jugador ingresa solo letras incorrectas y pierde
+  Scenario: Al comenzar el juego, la palabra debe estar oculta
     Given el jugador inicia una nueva partida
-    When ingresa 6 letras que no están en la palabra
-    Then el jugador pierde la partida
+    Then debería ver la palabra oculta como guiones bajos
 
-  Scenario: El jugador ingresa solo letras correctas y gana
+  Scenario: El jugador adivina una letra incorrecta
     Given el jugador inicia una nueva partida
-    When ingresa 6 letras que están en la palabra
-    Then el jugador gana la partida
+    When el jugador ingresa una letra que no está en la palabra
+    Then el contador de errores debería incrementarse
 
-  Scenario: El jugador ingresa letras correctas e incorrectas y gana
+  Scenario: El jugador pierde el juego tras 6 errores
     Given el jugador inicia una nueva partida
-    When ingresa 1 letra correcta 2 incorrectas 1 correcta 2 incorrectas y el resto de las correctas 
-    Then el jugador gana la partida
+    When el jugador ingresa 6 letras incorrectas
+    Then el jugador debería ver el mensaje de derrota
 
-  Scenario: El jugador ingresa letras correctas e incorrectas y pierde
+  Scenario: El botón de una letra usada se desactiva
     Given el jugador inicia una nueva partida
-    When ingresa 1 letra incorrecta 1 correcta 1 incorrecta 1 correcta 4 incorrectas
-    Then el jugador pierde la partida
+    When el jugador hace clic en una letra
+    Then el botón de esa letra debería estar desactivado
+
+  Scenario: Ganar completando letras una a una
+    Given el jugador inicia una nueva partida
+    When el jugador presiona todas las letras correctas de la palabra
+    Then el jugador debería ver el mensaje de victoria
