@@ -14,17 +14,20 @@ load_dotenv()
 
 TEST_SECRET = os.getenv("TEST_SECRET")
 
-
-
-@given('el jugador está en la pantalla de inicio')
-def step_impl(context):
+def crear_driver():
     chrome_options = Options()
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    return webdriver.Chrome(options=chrome_options)
 
-    context.driver = webdriver.Chrome(options=chrome_options)
+@given('el jugador está en la pantalla de inicio')
+def step_impl(context):
+    context.driver = context.driver = crear_driver()
     context.driver.get(f"http://localhost:5000/juego?test={TEST_SECRET}")
     time.sleep(1)
 
@@ -41,14 +44,13 @@ def step_impl(context):
 
 @given('el jugador inicia una nueva partida')
 def step_impl(context):
-    context.driver = webdriver.Chrome()
+    context.driver = context.driver = crear_driver()
     context.driver.get(f"http://localhost:5000/juego?test={TEST_SECRET}")
     time.sleep(3)
 
 @then('debería ver la palabra oculta como guiones bajos')
 def step_impl(context):
     palabra = context.driver.find_element(By.ID, "palabra-secreta").get_attribute("textContent").strip().upper()
-    letra_incorrecta = [l for l in LETRAS if l not in palabra][:1]
 
     boxes = context.driver.find_elements(By.CLASS_NAME, 'letra-box')
     assert len(boxes) > 0
