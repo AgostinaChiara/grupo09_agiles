@@ -9,7 +9,7 @@ import os
 import tempfile
 from dotenv import load_dotenv
 
-LETRAS = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
+LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 load_dotenv()
 
 TEST_SECRET = os.getenv("TEST_SECRET")
@@ -63,7 +63,7 @@ def step_impl(context):
     time.sleep(1)
 
 @then('el contador de errores debería incrementarse')
-def step_impl(context):    
+def step_impl(context):
     wait = WebDriverWait(context.driver, 10)
     wait.until(lambda d: d.find_element(By.ID, "cantErrores").text.strip() == "1")
 
@@ -73,9 +73,11 @@ def step_impl(context):
     letras_incorrectas = [l for l in LETRAS if l not in palabra][:6]
 
     for letra in letras_incorrectas:
-        print(letra)
-        context.driver.find_element(By.ID, f"btn-{letra}").click()
-        time.sleep(5)
+        btn = context.driver.find_element(By.ID, f"btn-{letra}")
+        btn.click()
+        WebDriverWait(context.driver, 3).until(
+            lambda d: d.find_element(By.ID, f"btn-{letra}").get_attribute("disabled") == "true"
+        )
 
 @then('el jugador debería ver el mensaje de derrota')
 def step_impl(context):
@@ -105,4 +107,6 @@ def step_impl(context):
     for letra in letras_unicas:
         btn = context.driver.find_element(By.ID, f"btn-{letra}")
         btn.click()
-        time.sleep(5)
+        WebDriverWait(context.driver, 3).until(
+            lambda d: d.find_element(By.ID, f"btn-{letra}").get_attribute("disabled") == "true"
+        )
