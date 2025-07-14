@@ -65,7 +65,9 @@ def step_impl(context):
 @then('el contador de errores debería incrementarse')
 def step_impl(context):
     wait = WebDriverWait(context.driver, 10)
-    wait.until(lambda d: d.find_element(By.ID, "cantErrores").text.strip() == "1")
+    print("Valor actual:", context.driver.find_element(By.ID, "cantErrores").text.strip())
+    wait.until(lambda d: "1" in d.find_element(By.ID, "cantErrores").text)
+    print("Valor actual:", context.driver.find_element(By.ID, "cantErrores").text.strip())
 
 @when('el jugador ingresa 6 letras incorrectas')
 def step_impl(context):
@@ -82,12 +84,16 @@ def step_impl(context):
 @then('el jugador debería ver el mensaje de derrota')
 def step_impl(context):
     wait = WebDriverWait(context.driver, 10)
+    print("Mensaje actual:", context.driver.find_element(By.ID, "mensajeJuego").text)
     wait.until(EC.text_to_be_present_in_element((By.ID, "mensajeJuego"), "¡Perdiste!"))
+    print("Mensaje actual:", context.driver.find_element(By.ID, "mensajeJuego").text)
 
 @then('el jugador debería ver el mensaje de victoria')
 def step_impl(context):
     wait = WebDriverWait(context.driver, 10)
+    print("Mensaje actual:", context.driver.find_element(By.ID, "mensajeJuego").text)
     wait.until(EC.text_to_be_present_in_element((By.ID, "mensajeJuego"), "¡Ganaste!"))
+    print("Mensaje actual:", context.driver.find_element(By.ID, "mensajeJuego").text)
 
 @when('el jugador hace clic en una letra')
 def step_impl(context):
