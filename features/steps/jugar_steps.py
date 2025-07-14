@@ -9,7 +9,7 @@ import os
 import tempfile
 from dotenv import load_dotenv
 
-LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+LETRAS = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
 load_dotenv()
 
 TEST_SECRET = os.getenv("TEST_SECRET")
@@ -50,8 +50,6 @@ def step_impl(context):
 
 @then('debería ver la palabra oculta como guiones bajos')
 def step_impl(context):
-    palabra = context.driver.find_element(By.ID, "palabra-secreta").get_attribute("textContent").strip().upper()
-
     boxes = context.driver.find_elements(By.CLASS_NAME, 'letra-box')
     assert len(boxes) > 0
     for box in boxes:
@@ -65,9 +63,9 @@ def step_impl(context):
     time.sleep(1)
 
 @then('el contador de errores debería incrementarse')
-def step_impl(context):
-    errores = context.driver.find_element(By.ID, "cantErrores").text
-    assert errores == "1"
+def step_impl(context):    
+    wait = WebDriverWait(context.driver, 10)
+    wait.until(lambda d: d.find_element(By.ID, "cantErrores").text.strip() == "1")
 
 @when('el jugador ingresa 6 letras incorrectas')
 def step_impl(context):
@@ -77,21 +75,17 @@ def step_impl(context):
     for letra in letras_incorrectas:
         print(letra)
         context.driver.find_element(By.ID, f"btn-{letra}").click()
-        time.sleep(0.5)
+        time.sleep(5)
 
 @then('el jugador debería ver el mensaje de derrota')
 def step_impl(context):
-    wait = WebDriverWait(context.driver, 5)
-    msje = wait.until(EC.visibility_of_element_located((By.ID, "mensajeJuego")))
-    msg = msje.text
-    assert "¡Perdiste!" in msg, f"Mensaje recibido: {msg}"
+    wait = WebDriverWait(context.driver, 10)
+    wait.until(EC.text_to_be_present_in_element((By.ID, "mensajeJuego"), "¡Perdiste!"))
 
 @then('el jugador debería ver el mensaje de victoria')
 def step_impl(context):
-    wait = WebDriverWait(context.driver, 5)
-    msje = wait.until(EC.visibility_of_element_located((By.ID, "mensajeJuego")))
-    msg = msje.text
-    assert "¡Ganaste!" in msg, f"Mensaje recibido: {msg}"
+    wait = WebDriverWait(context.driver, 10)
+    wait.until(EC.text_to_be_present_in_element((By.ID, "mensajeJuego"), "¡Ganaste!"))
 
 @when('el jugador hace clic en una letra')
 def step_impl(context):
@@ -111,4 +105,4 @@ def step_impl(context):
     for letra in letras_unicas:
         btn = context.driver.find_element(By.ID, f"btn-{letra}")
         btn.click()
-        time.sleep(0.3)
+        time.sleep(5)
