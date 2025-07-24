@@ -30,7 +30,7 @@ class Ahorcado:
         :param palabra: Palabra a adivinar.
         :param intentos_maximos: Cantidad máxima de intentos permitidos.
         '''
-        self.palabra_secreta = self.palabras[str(dificultad)][random.randint(0,29)]
+        self.palabra_secreta = self.palabras[str(dificultad)][0]
         self.intentos_maximos = intentos_maximos
         self.intentos_restantes = intentos_maximos
         self.letras_adivinadas = list()
