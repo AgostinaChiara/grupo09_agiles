@@ -1,11 +1,17 @@
 {
   "1": [
-    "holis"
+    "casa", "mesa", "gato", "perro", "libro", "silla", "sol", "luna", "mano", "flor",
+    "calle", "queso", "nube", "cama", "ojo", "leche", "vaso", "pato", "tren", "auto",
+    "arbol", "bola", "mar", "sal", "dia", "pez", "miel", "papa", "rio", "cielo"
   ],
   "2": [
-    "cocina"
+    "cocina", "ventana", "mochila", "palmera", "castillo", "planeta", "bandera", "espejo", "botella", "zapato",
+    "naranja", "cabello", "tortuga", "martillo", "lechuga", "vestido", "escuela", "madera", "ladrillo", "alfombra",
+    "cereza", "elefante", "charco", "guitarra", "aceite", "ratones", "jabon", "pantalla", "dibujo", "camiseta"
   ],
   "3": [
-    "murcielago"
+    "murcielago", "relojero", "quimera", "xilofono", "pinguino", "zigzag", "brunido", "jacaranda", "kilometro", "destello",
+    "enjambre", "crater", "anemona", "zarzamora", "whisky", "jinete", "oximoron", "quiosquero", "yacimiento", "fragil",
+    "buzon", "gondola", "nausea", "jirafa", "condor", "zocalo", "psicologo", "projimo", "magico", "volcan"
   ]
 }
