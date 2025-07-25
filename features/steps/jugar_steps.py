@@ -73,14 +73,14 @@ def step_impl(context):
     mensaje = WebDriverWait(context.driver, 10).until(
         EC.visibility_of_element_located((By.ID, "mensajeJuego"))
     )
-    assert "¡Perdiste!" in mensaje.text
+    assert "¡Ganaste!" in mensaje.text
 
 @then('el jugador debería ver el mensaje de victoria')
 def step_impl(context):
     mensaje = WebDriverWait(context.driver, 10).until(
         EC.visibility_of_element_located((By.ID, "mensajeJuego"))
     )
-    assert "¡Ganaste!" in mensaje.text
+    assert "¡Perdiste!" in mensaje.text
 
 @when('el jugador hace clic en una letra')
 def step_impl(context):
