@@ -56,6 +56,16 @@ jobs:
           coverage report -m
           coverage xml -o coverage-report.xml
 
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=AgostinaChiara_grupo09_agiles
+            -Dsonar.organization=agostinachiara
+            -Dsonar.python.coverage.reportPaths=coverage-report.xml
+
       - name: Run acceptance tests
         run: behave features
 
